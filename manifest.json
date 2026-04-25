@@ -1,0 +1,17 @@
+{
+  "name": "Mazen Chef Restaurant",
+  "short_name": "Mazen Chef",
+  "description": "A Culinary Experience",
+  "start_url": "mazen-chef (2).html",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
+  "icons": [
+    {
+      "src": "pwa.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
