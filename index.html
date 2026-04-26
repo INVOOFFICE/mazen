@@ -721,16 +721,33 @@
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     max-width: 800px; margin: 0 auto;
   }
-  .pwa-icon { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(201,169,110,0.5); }
+  .pwa-icon { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(201,169,110,0.5); flex-shrink: 0; }
   .pwa-text { flex: 1; display: flex; flex-direction: column; }
   .pwa-text strong { color: var(--gold); font-size: 0.9rem; font-family: 'Playfair Display', serif; }
   .pwa-text span { color: rgba(255,255,255,0.6); font-size: 0.75rem; margin-top: 0.2rem; }
   .pwa-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 1.2rem; cursor: pointer; padding: 0.5rem; margin-right: -0.5rem; transition: color 0.3s; }
   .pwa-close:hover { color: var(--gold); }
   @media (max-width: 640px) {
-    .pwa-banner-content { gap: 0.8rem; }
-    .pwa-text strong { font-size: 0.85rem; }
-    .pwa-text span { font-size: 0.65rem; }
+    .pwa-banner { padding: 1.5rem 6vw; }
+    .pwa-banner-content { 
+      display: grid; 
+      grid-template-columns: auto 1fr auto; 
+      grid-template-rows: auto auto;
+      gap: 1rem 0.8rem; 
+      align-items: center;
+    }
+    .pwa-icon { grid-column: 1; grid-row: 1; width: 42px; height: 42px; }
+    .pwa-text { grid-column: 2; grid-row: 1; }
+    .pwa-close { grid-column: 3; grid-row: 1; padding: 0; }
+    #pwa-install { 
+      grid-column: 1 / span 3; 
+      grid-row: 2; 
+      width: 100%; 
+      margin-top: 0.5rem;
+      padding: 0.8rem !important;
+    }
+    .pwa-text span { display: none; } /* Hide long text on small screens if needed, or keeping it short */
+    .pwa-text strong { font-size: 1rem; }
   }
 </style>
 </head>
