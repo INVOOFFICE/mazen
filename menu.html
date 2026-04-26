@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mazen Chef – Digital Menu</title>
+<meta name="theme-color" content="#080808">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root {
+  --black:  #080808;
+  --black2: #0d0d0d;
+  --black3: #131313;
+  --black4: #1a1a1a;
+  --gold:   #c8a96a;
+  --gold2:  #dfc08a;
+  --gold3:  #9a7d49;
+  --white:  #f5f0e8;
+  --cream:  #e8dfc8;
+  --gray:   #555;
+  --gray2:  #888;
+  --serif:  'Playfair Display', Georgia, serif;
+  --sans:   'Poppins', sans-serif;
+  --sidebar-w: 240px;
+  --ease: cubic-bezier(0.4,0,0.2,1);
+}
+
+html {
+  height: auto;
+  overflow-y: scroll;
+}
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  overflow-y: auto;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold3); border-radius: 10px; }
+
+/* ── LAYOUT ──────────────────────────────────────── */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  align-items: flex-start;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  height: 100vh;
+  position: fixed;
+  top: 0; left: 0;
+  background: var(--black2);
+  border-right: 0.5px solid rgba(200,169,106,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.sidebar::-webkit-scrollbar { width: 2px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--gold3); }
+
+/* Brand inside sidebar */
+.sidebar-brand {
+  padding: 2.5rem 1.8rem 2rem;
+  border-bottom: 0.5px solid rgba(200,169,106,0.1);
+  text-align: center;
+}
+.brand-eyebrow {
+  font-size: 0.55rem;
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  color: var(--gold3);
+  text-transform: uppercase;
+  margin-bottom: 0.7rem;
+}
+.brand-name {
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+.brand-name em { font-style: italic; color: var(--gold2); font-weight: 700; }
+.brand-sub {
+  display: block;
+  font-size: 0.5rem;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: var(--gray2);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+.brand-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+.b-line { flex: 1; height: 0.5px; background: rgba(200,169,106,0.2); }
+.b-diamond { width: 4px; height: 4px; background: var(--gold3); transform: rotate(45deg); flex-shrink: 0; }
+
+/* Nav list */
+.nav-label {
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: var(--gold3);
+  text-transform: uppercase;
+  padding: 1.5rem 1.8rem 0.6rem;
+}
+.nav-list {
+  list-style: none;
+  padding: 0 0 2rem;
+}
+.nav-item { position: relative; }
+.nav-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--gray2);
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.75rem 1.8rem;
+  cursor: pointer;
+  transition: color 0.25s var(--ease), background 0.25s var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  position: relative;
+}
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 1.5px;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+.nav-btn:hover { color: var(--cream); background: rgba(200,169,106,0.03); }
+.nav-btn.active { color: var(--gold2); background: rgba(200,169,106,0.05); }
+.nav-btn.active::before { opacity: 1; }
+
+.nav-icon {
+  width: 14px; height: 14px;
+  opacity: 0.4;
+  flex-shrink: 0;
+  transition: opacity 0.25s;
+}
+.nav-btn.active .nav-icon { opacity: 0.9; }
+
+/* ── MAIN CONTENT ────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  width: calc(100% - var(--sidebar-w));
+  overflow: visible;
+}
+
+/* ── SECTION ─────────────────────────────────────── */
+.menu-section {
+  display: none;
+  padding: 4rem 3.5rem 6rem;
+  animation: fadeUp 0.4s var(--ease) forwards;
+  min-height: auto;
+  overflow: visible;
+}
+.menu-section.active {
+  display: block;
+  min-height: calc(100vh - 8rem);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.section-header { margin-bottom: 3.5rem; }
+.section-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  color: var(--gold3);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--white);
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+.section-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.s-line { width: 40px; height: 0.5px; background: var(--gold3); }
+.s-dot  { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; }
+
+/* ── GRID ────────────────────────────────────────── */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+  border-top: 0.5px solid rgba(200,169,106,0.1);
+  border-left: 0.5px solid rgba(200,169,106,0.1);
+}
+.item-card {
+  padding: 2rem 2.2rem;
+  border-right: 0.5px solid rgba(200,169,106,0.1);
+  border-bottom: 0.5px solid rgba(200,169,106,0.1);
+  transition: background 0.3s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.item-card:hover { background: var(--black3); }
+.item-number { font-family: var(--serif); font-size: 0.65rem; color: var(--gold3); letter-spacing: 0.15em; font-style: italic; margin-bottom: 1rem; }
+.item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.item-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; color: var(--white); line-height: 1.2; flex: 1; }
+.item-price { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; color: var(--gold); white-space: nowrap; font-style: italic; }
+.item-divider { width: 18px; height: 0.5px; background: var(--gold3); opacity: 0.5; margin: 0.9rem 0; }
+.item-desc { font-size: 0.7rem; font-weight: 300; color: var(--gray2); letter-spacing: 0.03em; line-height: 1.8; }
+
+/* ── LIST ────────────────────────────────────────── */
+.menu-list { max-width: 620px; }
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1.6rem 0;
+  border-bottom: 0.5px solid rgba(200,169,106,0.08);
+  gap: 2rem;
+}
+.list-info { flex: 1; }
+.list-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: var(--white); }
+.list-desc { display: block; font-size: 0.68rem; font-weight: 300; color: var(--gray2); margin-top: 0.3rem; letter-spacing: 0.03em; }
+.list-price { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; color: var(--gold); white-space: nowrap; font-style: italic; }
+
+/* leader dots */
+.list-item { position: relative; }
+.list-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(200,169,106,0.15);
+  margin: 0 0.5rem;
+  align-self: baseline;
+  position: relative;
+  top: -4px;
+}
+
+/* ── MOBILE TOGGLE ───────────────────────────────── */
+.mob-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem; left: 1rem;
+  z-index: 200;
+  background: var(--black2);
+  border: 0.5px solid rgba(200,169,106,0.25);
+  color: var(--gold);
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.mob-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 99;
+  backdrop-filter: blur(4px);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 220px; }
+  .mob-toggle { display: flex; }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.35s var(--ease);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .mob-overlay.open { display: block; }
+  .main {
+    margin-left: 0;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .menu-section { padding: 5rem 1.5rem 5rem; }
+  .menu-section.active { min-height: auto; }
+  .section-title { font-size: 2rem; }
+  .menu-grid { grid-template-columns: 1fr; border-left: none; }
+  .item-card { border-left: none; border-right: none; padding: 1.6rem 0; }
+  /* Fix list items on small screens */
+  .list-item { gap: 0.8rem; padding: 1.2rem 0; }
+  .list-dots { min-width: 20px; }
+  .menu-list { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .menu-section { padding: 5rem 1rem 3rem; }
+  .section-title { font-size: 1.7rem; }
+  .section-eyebrow { font-size: 0.55rem; }
+  /* Wrap item header on very small screens */
+  .item-header { flex-direction: column; gap: 0.4rem; align-items: flex-start; }
+  .item-price { font-size: 0.95rem; }
+  .item-name { font-size: 1.1rem; }
+  /* List layout: stack name + price vertically if needed */
+  .list-item { flex-wrap: wrap; gap: 0.3rem; }
+  .list-dots { display: none; }
+  .list-name { font-size: 1rem; }
+  .list-price { font-size: 0.95rem; margin-left: auto; }
+  /* Brand in sidebar */
+  .brand-name { font-size: 1.4rem; }
+  /* Mob toggle position safe area */
+  .mob-toggle { top: 0.8rem; left: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile toggle -->
+<button class="mob-toggle" id="mobToggle" aria-label="Open menu">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="mob-overlay" id="mobOverlay"></div>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-brand">
+    <p class="brand-eyebrow">Tangier · Syrian Cuisine</p>
+    <div class="brand-name">Mazen <em>Chef</em></div>
+    <span class="brand-sub">Digital Menu</span>
+    <div class="brand-ornament">
+      <div class="b-line"></div>
+      <div class="b-diamond"></div>
+      <div class="b-line"></div>
+    </div>
+  </div>
+
+  <p class="nav-label">Our Menu</p>
+
+  <ul class="nav-list">
+    <li class="nav-item">
+      <button class="nav-btn active" onclick="show('cold-starters',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+        Cold Starters
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('hot-starters',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c0 4-4 5-4 9a4 4 0 008 0c0-4-4-5-4-9z"/></svg>
+        Hot Starters
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('salads',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V12M12 12C12 7 6 4 3 7M12 12C12 7 18 4 21 7"/></svg>
+        Salads
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('assorted',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Assorted Platters
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('sandwich',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h18M3 16h18M5 8v8M19 8v8"/></svg>
+        Sandwiches
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('meal',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>
+        Platter Meals
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('arabi',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L3 9v12h6v-7h6v7h6V9z"/></svg>
+        El Arabi
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('chawarma-kg',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M6 6V4h12v2M5 20h14l1-14H4z"/></svg>
+        By Weight
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('grills',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M4 12a8 8 0 0016 0M9 12V8M15 12V8"/></svg>
+        Fire Grills
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('smoked',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3c0 3-3 4-3 7s3 4 3 7M12 3c0 3-3 4-3 7s3 4 3 7M16 3c0 3-3 4-3 7s3 4 3 7"/></svg>
+        Smoked Meats
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('oriental',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Oriental Cuisine
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('family',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Family Dishes
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('juices',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2h8l1 6H7zM7 8c0 8 2 12 5 12s5-4 5-12"/></svg>
+        Fresh Juices
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('desserts',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a5 5 0 015 5c0 3-5 8-5 8S7 10 7 7a5 5 0 015-5z"/><path d="M5 20h14"/></svg>
+        Desserts
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="show('beverages',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+        Beverages
+      </button>
+    </li>
+  </ul>
+
+  <div style="margin-top:auto;padding:1.5rem 1.8rem;border-top:0.5px solid rgba(200,169,106,0.08);">
+    <a href="index.html" style="display:flex;align-items:center;gap:0.6rem;color:var(--gray2);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;transition:color .25s;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      Home
+    </a>
+  </div>
+
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- Cold Starters -->
+  <section class="menu-section active" id="cold-starters">
+    <div class="section-header">
+      <p class="section-eyebrow">To Begin</p>
+      <h2 class="section-title">Cold Starters</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Hummous Tahina</div><div class="item-price">48 MAD</div></div><div class="item-divider"></div><p class="item-desc">Hummus · Tahina · Olive Oil · Tomato</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Hummous Tahina Viande</div><div class="item-price">60 MAD</div></div><div class="item-divider"></div><p class="item-desc">Hummus · Tahina · Sautéed Meat · Olive Oil</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Father Ghanouj</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">Eggplant · Pepper · Olive Oil</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Mtabel Beetroot</div><div class="item-price">40 MAD</div></div><div class="item-divider"></div><p class="item-desc">Beetroot · Laban · Tahina · Olive Oil</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Mtabel d'Aubergines</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">Aubergines · Laban · Tahina · Olive Oil</p></div>
+      <div class="item-card"><div class="item-number">06</div><div class="item-header"><div class="item-name">Muhammara</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">Pepper · Hazelnut · Olive Oil</p></div>
+      <div class="item-card"><div class="item-number">07</div><div class="item-header"><div class="item-name">Warak Enab</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">Hand-rolled vine leaves with savory rice filling</p></div>
+    </div>
+  </section>
+
+  <!-- Hot Starters -->
+  <section class="menu-section" id="hot-starters">
+    <div class="section-header">
+      <p class="section-eyebrow">Warm & Golden</p>
+      <h2 class="section-title">Hot Starters</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Kebab — 4 Pieces</div><div class="item-price">55 MAD</div></div><div class="item-divider"></div><p class="item-desc">Minced Meat · Hazelnuts</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Falafel — 5 Pieces</div><div class="item-price">30 MAD</div></div><div class="item-divider"></div><p class="item-desc">Syrian style crispy falafels</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Falafel Sandwich</div><div class="item-price">25 MAD</div></div><div class="item-divider"></div><p class="item-desc">Falafel · Cucumber · Pickled Cucumber · Tomato</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Sambousek Cheese</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">4 pieces of golden fried cheese pastry</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Sambousek Meat</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">4 pieces of golden fried minced meat pastry</p></div>
+      <div class="item-card"><div class="item-number">06</div><div class="item-header"><div class="item-name">Cheese Roll — 4 Pieces</div><div class="item-price">50 MAD</div></div><div class="item-divider"></div><p class="item-desc">Crispy rolls with a melting cheese heart</p></div>
+    </div>
+  </section>
+
+  <!-- Salads -->
+  <section class="menu-section" id="salads">
+    <div class="section-header">
+      <p class="section-eyebrow">Garden Fresh</p>
+      <h2 class="section-title">Fresh Salads</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Fattouch</div><div class="item-price">40 MAD</div></div><div class="item-divider"></div><p class="item-desc">Tomatoes · Cucumber · Pepper · Lettuce · Green Cabbage</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Tabouleh</div><div class="item-price">45 MAD</div></div><div class="item-divider"></div><p class="item-desc">Parsley · Tomatoes · Bulgur</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Salade Chamia</div><div class="item-price">30 MAD</div></div><div class="item-divider"></div><p class="item-desc">Tomatoes · Cucumber · Pepper · Lettuce · Red Cabbage</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Salads The Fail</div><div class="item-price">20 MAD</div></div><div class="item-divider"></div><p class="item-desc">Green Cabbage · Mayonnaise Toumia</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Mixed Vegetable Salad</div><div class="item-price">20 MAD</div></div><div class="item-divider"></div><p class="item-desc">Salad · Lettuce · Tomatoes · Cucumber · Pickles · Beetroot · Toumia</p></div>
+    </div>
+  </section>
+
+  <!-- Assorted -->
+  <section class="menu-section" id="assorted">
+    <div class="section-header">
+      <p class="section-eyebrow">Sharing & Tasting</p>
+      <h2 class="section-title">Assorted Platters</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Plate for 1 Person</div><div class="item-price">95 MAD</div></div><div class="item-divider"></div><p class="item-desc">A perfect mix of Cold & Hot Starters</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Plate for 2 People</div><div class="item-price">120 MAD</div></div><div class="item-divider"></div><p class="item-desc">Designed for sharing Syrian goodness</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Plate for 3 People</div><div class="item-price">165 MAD</div></div><div class="item-divider"></div><p class="item-desc">Generous assortment for the group</p></div>
+    </div>
+  </section>
+
+  <!-- Sandwiches -->
+  <section class="menu-section" id="sandwich">
+    <div class="section-header">
+      <p class="section-eyebrow">Street Heritage</p>
+      <h2 class="section-title">Sandwiches</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-list">
+      <div class="list-item"><div class="list-info"><div class="list-name">Chicken Shawarma</div><span class="list-desc">Pickled Cucumber · Mayonnaise Toumia</span></div><div class="list-dots"></div><div class="list-price">33 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chawarma Meat</div><span class="list-desc">Parsley · Onion · Tomato · Tahini · Marinated Cucumber</span></div><div class="list-dots"></div><div class="list-price">39 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chawarma Mix</div></div><div class="list-dots"></div><div class="list-price">36 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Super Chicken Shawarma</div><span class="list-desc">Larger portion · Pickled Cucumber · Toumia</span></div><div class="list-dots"></div><div class="list-price">36 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chawarma Meat Super</div><span class="list-desc">Parsley · Onion · Tomato · Tahini · Marinated Cucumber</span></div><div class="list-dots"></div><div class="list-price">42 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chawarma Mix Super</div></div><div class="list-dots"></div><div class="list-price">40 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chicken Kabab</div><span class="list-desc">Pickled Cucumber · Mayonnaise Toumia</span></div><div class="list-dots"></div><div class="list-price">55 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Kabab Meat</div><span class="list-desc">Onion · Parsley · Hummus · Pomegranate Juice</span></div><div class="list-dots"></div><div class="list-price">70 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Chich Taouk</div><span class="list-desc">Hummus · Mayonnaise Toumia</span></div><div class="list-dots"></div><div class="list-price">65 MAD</div></div>
+    </div>
+  </section>
+
+  <!-- Meals -->
+  <section class="menu-section" id="meal">
+    <div class="section-header">
+      <p class="section-eyebrow">Main Course</p>
+      <h2 class="section-title">Platter Meals</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Chicken Shawarma Dish</div><div class="item-price">85 MAD</div></div><div class="item-divider"></div><p class="item-desc">Fries · Fresh & Pickled Vegetables · Mayonnaise</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Plat Chawarma Meat</div><div class="item-price">95 MAD</div></div><div class="item-divider"></div><p class="item-desc">Fries · Fresh & Pickled Vegetables · Mayonnaise</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Chawarma Mix Plate</div><div class="item-price">90 MAD</div></div><div class="item-divider"></div><p class="item-desc">Fries · Fresh & Pickled Vegetables · Mayonnaise</p></div>
+    </div>
+  </section>
+
+  <!-- El Arabi -->
+  <section class="menu-section" id="arabi">
+    <div class="section-header">
+      <p class="section-eyebrow">Authentic Flavours</p>
+      <h2 class="section-title">El Arabi Experience</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Arabic Chicken Shawarma</div><div class="item-price">60 MAD</div></div><div class="item-divider"></div><p class="item-desc">Fries · Full Salad Selection · Mayonnaise</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Journal of Arabic Food</div><div class="item-price">70 MAD</div></div><div class="item-divider"></div><p class="item-desc">A diverse tasting of Arabic street food delights</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Mixed Arabic Chawarma</div><div class="item-price">65 MAD</div></div><div class="item-divider"></div><p class="item-desc">Selection of meats with fries and sides</p></div>
+    </div>
+  </section>
+
+  <!-- By Weight -->
+  <section class="menu-section" id="chawarma-kg">
+    <div class="section-header">
+      <p class="section-eyebrow">Premium Selection</p>
+      <h2 class="section-title">Chawarma by Weight</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-list">
+      <div class="list-item"><div class="list-info"><div class="list-name">½ Kg Chawarma Chicken</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">160 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">½ Kg Chawarma Meat</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">195 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">½ Kg Chawarma Mix</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">180 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">1 Kg Chawarma Chicken</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">310 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">1 Kg Chawarma Meat</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">385 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">1 Kg Chawarma Mix</div><span class="list-desc">With Sides</span></div><div class="list-dots"></div><div class="list-price">350 MAD</div></div>
+    </div>
+  </section>
+
+  <!-- Grills -->
+  <section class="menu-section" id="grills">
+    <div class="section-header">
+      <p class="section-eyebrow">Fire & Smoke</p>
+      <h2 class="section-title">Fire Grills</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Chicken Skewers</div><div class="item-price">110 MAD</div></div><div class="item-divider"></div><p class="item-desc">3 skewers · Mindi Rice</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Chiche Taouk</div><div class="item-price">120 MAD</div></div><div class="item-divider"></div><p class="item-desc">3 skewers · Mindi Rice</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Chicken Wings</div><div class="item-price">95 MAD</div></div><div class="item-divider"></div><p class="item-desc">Golden grilled wings · Mindi Rice</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Minced Meat</div><div class="item-price">130 MAD</div></div><div class="item-divider"></div><p class="item-desc">3 skewers · Mindi Rice · Salads</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Meat Skewers</div><div class="item-price">145 MAD</div></div><div class="item-divider"></div><p class="item-desc">3 skewers · Mindi Rice · Salads</p></div>
+      <div class="item-card"><div class="item-number">06</div><div class="item-header"><div class="item-name">Medium Mixed Platter</div><div class="item-price">350 MAD</div></div><div class="item-divider"></div><p class="item-desc">10 skewers · Mindi Rice · Salads</p></div>
+    </div>
+  </section>
+
+  <!-- Smoked -->
+  <section class="menu-section" id="smoked">
+    <div class="section-header">
+      <p class="section-eyebrow">Slow & Low</p>
+      <h2 class="section-title">Premium Smoked Meats</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Tomahawk / Beef Ribs 1kg</div><div class="item-price">650 MAD</div></div><div class="item-divider"></div><p class="item-desc">Potatoes · Mendi Rice · Mushrooms · Cherry Tomatoes · Corn · Pineapple · 3 Sauces</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Smoked Beef Leg 1kg</div><div class="item-price">650 MAD</div></div><div class="item-divider"></div><p class="item-desc">Potatoes · Mendi Rice · Mushrooms · Cherry Tomatoes · Corn · Pineapple · 3 Sauces</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Roast Beef 1kg</div><div class="item-price">650 MAD</div></div><div class="item-divider"></div><p class="item-desc">Classic slow-roasted beef with signature sides</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Lamb Shoulder 1kg</div><div class="item-price">620 MAD</div></div><div class="item-divider"></div><p class="item-desc">Slow-smoked tender shoulder · Premium sides</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Lamb Neck 1kg</div><div class="item-price">620 MAD</div></div><div class="item-divider"></div><p class="item-desc">Succulent smoked neck · Premium sides</p></div>
+      <div class="item-card"><div class="item-number">06</div><div class="item-header"><div class="item-name">Lamb Leg 1kg</div><div class="item-price">620 MAD</div></div><div class="item-divider"></div><p class="item-desc">Slow-cooked leg · Premium sides</p></div>
+      <div class="item-card"><div class="item-number">07</div><div class="item-header"><div class="item-name">Lamb Rack 1kg</div><div class="item-price">620 MAD</div></div><div class="item-divider"></div><p class="item-desc">Smoked lamb rack · Premium sides</p></div>
+    </div>
+  </section>
+
+  <!-- Oriental -->
+  <section class="menu-section" id="oriental">
+    <div class="section-header">
+      <p class="section-eyebrow">From the East</p>
+      <h2 class="section-title">Oriental Cuisine</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Kabseh Chicken</div><div class="item-price">115 MAD</div></div><div class="item-divider"></div><p class="item-desc">Mindi Rice · Basmati Rice · Fresh Salads · Kabseh Sauce</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Kabseh Meat</div><div class="item-price">135 MAD</div></div><div class="item-divider"></div><p class="item-desc">Mindi Rice · Basmati Rice · Fresh Salads · Kabseh Sauce</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Frikeh Chicken</div><div class="item-price">135 MAD</div></div><div class="item-divider"></div><p class="item-desc">Syrian specialty · Laban Cucumber Salad</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Frikeh Meat</div><div class="item-price">155 MAD</div></div><div class="item-divider"></div><p class="item-desc">Syrian specialty · Laban Cucumber Salad</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Red Lentil Soup</div><div class="item-price">25 MAD</div></div></div>
+    </div>
+  </section>
+
+  <!-- Family -->
+  <section class="menu-section" id="family">
+    <div class="section-header">
+      <p class="section-eyebrow">Celebrate Together</p>
+      <h2 class="section-title">Family Dishes</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-list">
+      <div class="list-item"><div class="list-info"><div class="list-name">Dish for 2 People</div></div><div class="list-dots"></div><div class="list-price">500 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Dish for 4 People</div></div><div class="list-dots"></div><div class="list-price">950 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Dish for 6 People</div></div><div class="list-dots"></div><div class="list-price">1 350 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Dish for 8 People</div></div><div class="list-dots"></div><div class="list-price">1 750 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Dish for 10 People</div></div><div class="list-dots"></div><div class="list-price">2 250 MAD</div></div>
+    </div>
+  </section>
+
+  <!-- Juices -->
+  <section class="menu-section" id="juices">
+    <div class="section-header">
+      <p class="section-eyebrow">Pressed Fresh Daily</p>
+      <h2 class="section-title">Fresh Juices</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-list">
+      <div class="list-item"><div class="list-info"><div class="list-name">Avocado Juice</div></div><div class="list-dots"></div><div class="list-price">40 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Milk Panache</div></div><div class="list-dots"></div><div class="list-price">40 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Pineapple Juice</div></div><div class="list-dots"></div><div class="list-price">40 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Lemon Ginger Juice</div></div><div class="list-dots"></div><div class="list-price">40 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Strawberry Juice</div></div><div class="list-dots"></div><div class="list-price">35 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Lemon & Mint Juice</div></div><div class="list-dots"></div><div class="list-price">35 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Apple · Banana · Orange</div></div><div class="list-dots"></div><div class="list-price">30 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Laban Ayran</div></div><div class="list-dots"></div><div class="list-price">25 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Karkadé Juice</div></div><div class="list-dots"></div><div class="list-price">25 MAD</div></div>
+    </div>
+  </section>
+
+  <!-- Desserts -->
+  <section class="menu-section" id="desserts">
+    <div class="section-header">
+      <p class="section-eyebrow">Sweet Endings</p>
+      <h2 class="section-title">Syrian Desserts</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-grid">
+      <div class="item-card"><div class="item-number">01</div><div class="item-header"><div class="item-name">Kunafa Mloukia — Large</div><div class="item-price">95 MAD</div></div><div class="item-divider"></div><p class="item-desc">With Ice Cream & Dried Fruit</p></div>
+      <div class="item-card"><div class="item-number">02</div><div class="item-header"><div class="item-name">Kunafa Mloukia — Medium</div><div class="item-price">85 MAD</div></div><div class="item-divider"></div><p class="item-desc">With Ice Cream & Dried Fruit</p></div>
+      <div class="item-card"><div class="item-number">03</div><div class="item-header"><div class="item-name">Kunafa Set — Large</div><div class="item-price">80 MAD</div></div><div class="item-divider"></div><p class="item-desc">With Ice Cream</p></div>
+      <div class="item-card"><div class="item-number">04</div><div class="item-header"><div class="item-name">Kunafa Set — Medium</div><div class="item-price">70 MAD</div></div><div class="item-divider"></div><p class="item-desc">With Ice Cream</p></div>
+      <div class="item-card"><div class="item-number">05</div><div class="item-header"><div class="item-name">Kunafa Al Cham — Large</div><div class="item-price">65 MAD</div></div></div>
+      <div class="item-card"><div class="item-number">06</div><div class="item-header"><div class="item-name">Kunafa Al Cham — Medium</div><div class="item-price">55 MAD</div></div></div>
+      <div class="item-card"><div class="item-number">07</div><div class="item-header"><div class="item-name">The Graves</div><div class="item-price">25 MAD</div></div><div class="item-divider"></div><p class="item-desc">With Dried Fruit Assortment</p></div>
+    </div>
+  </section>
+
+  <!-- Beverages -->
+  <section class="menu-section" id="beverages">
+    <div class="section-header">
+      <p class="section-eyebrow">To Accompany</p>
+      <h2 class="section-title">Beverages</h2>
+      <div class="section-ornament"><div class="s-line"></div><div class="s-dot"></div><div class="s-line"></div></div>
+    </div>
+    <div class="menu-list">
+      <div class="list-item"><div class="list-info"><div class="list-name">Chamia Coffee</div></div><div class="list-dots"></div><div class="list-price">35 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Oulmès 1L</div></div><div class="list-dots"></div><div class="list-price">28 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Sidi Ali 1L</div></div><div class="list-dots"></div><div class="list-price">25 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Carbonated Drinks · Orangina</div></div><div class="list-dots"></div><div class="list-price">18 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Oulmès 50cl</div></div><div class="list-dots"></div><div class="list-price">18 MAD</div></div>
+      <div class="list-item"><div class="list-info"><div class="list-name">Sidi Ali 50cl · Syrian Tea</div></div><div class="list-dots"></div><div class="list-price">15 MAD</div></div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobOverlay').classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('mobToggle').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mobOverlay').classList.toggle('open');
+});
+document.getElementById('mobOverlay').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobOverlay').classList.remove('open');
+});
+</script>
+</body>
+</html>

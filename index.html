@@ -24,13 +24,15 @@
     --gray: #888;
     --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  html { scroll-behavior: smooth; font-size: 16px; }
+  html { scroll-behavior: smooth; font-size: 16px; overflow-y: scroll; }
   body {
     background: var(--black);
     color: var(--white);
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
+    overflow-y: auto;
     cursor: default;
+    -webkit-overflow-scrolling: touch;
   }
   img { max-width: 100%; display: block; }
   a { text-decoration: none; color: inherit; }
@@ -651,8 +653,9 @@
     .nav-links { display: none; }
     .nav-cta { display: none; }
     .hamburger { display: flex; }
-    .about-inner { grid-template-columns: 1fr; }
-    .about-visual { max-width: 500px; }
+    .about-inner { grid-template-columns: 1fr; text-align: center; }
+    .about-visual { max-width: 500px; margin: 0 auto; }
+    .section-divider { margin-left: auto; margin-right: auto; }
     .locations-grid { grid-template-columns: 1fr; }
     .gallery-grid {
       grid-template-columns: repeat(2,1fr);
@@ -668,13 +671,42 @@
     .res-row { grid-template-columns: 1fr; }
     .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
     .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-legal { justify-content: center; gap: 1rem; }
     .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
     .gallery-item:nth-child(1) { grid-column: auto !important; }
     .gallery-item:nth-child(9) { grid-column: auto !important; }
-    .about-badge { width: 110px; height: 110px; right: -0.5rem; bottom: -0.5rem; }
-    .about-badge strong { font-size: 2rem; }
+    .about-badge {
+      width: 100px; height: 100px;
+      right: 0.5rem; bottom: -1.5rem;
+      border: 3px solid #0f0f0f;
+    }
+    .about-badge strong { font-size: 1.8rem; }
+    .about-badge span { font-size: 0.5rem; letter-spacing: 0.15em; }
     .menu-tabs { flex-direction: column; width: 100%; }
     .testimonial-card { flex: 0 0 90vw; }
+    /* Portrait Videos for Mobile */
+    .about-img-main { aspect-ratio: 4/5; }
+    .video-wrapper { aspect-ratio: 9/16; }
+    .about-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .stat-val { font-size: 1.8rem; }
+    .stat-lbl { font-size: 0.6rem; }
+    /* Fix floating buttons overlap on mobile */
+    .floating-cta { bottom: 5.5rem; left: 1rem; padding: 0.5rem 0.9rem; font-size: 0.65rem; }
+    #back-top { bottom: 1.5rem; right: 1rem; width: 40px; height: 40px; }
+    /* Hero buttons stacking */
+    .hero-actions { flex-direction: column; align-items: center; gap: 1rem; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; padding: 0.9rem 1.5rem; }
+    /* Nav CTA on mobile menu */
+    .mobile-menu a { font-size: 1.5rem; }
+    /* Section title adjust */
+    .section-title { font-size: clamp(1.6rem, 6vw, 2.5rem); }
+  }
+
+  @media (max-width: 380px) {
+    .about-stats { grid-template-columns: 1fr; gap: 1rem; }
+    .stat-val { font-size: 2rem; }
+    .about-badge { width: 85px; height: 85px; right: 0.2rem; bottom: -1rem; }
+    .about-badge strong { font-size: 1.5rem; }
   }
 
   /* ===== PWA BANNER ===== */
@@ -728,7 +760,7 @@
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" onclick="closeMobile()">About</a>
-  <a href="#menu" onclick="closeMobile()">Menu</a>
+  <a href="menu.html" onclick="closeMobile()">Menu</a>
   <a href="#gallery" onclick="closeMobile()">Gallery</a>
   <a href="#video" onclick="closeMobile()">Show</a>
   <a href="#locations" onclick="closeMobile()">Locations</a>
@@ -740,7 +772,7 @@
   <a href="#hero" class="nav-logo">Mazen Chef<span>Syrian &amp; International</span></a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="#menu">Menu</a></li>
+    <li><a href="menu.html">Menu</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#video">Live Show</a></li>
     <li><a href="#locations">Locations</a></li>
@@ -762,7 +794,7 @@
     <p class="hero-sub">Where Syrian tradition meets international innovation. Led by the acclaimed Chef Mazen, every dish is a journey — prepared live before your eyes.</p>
     <div class="hero-actions">
       <a href="#reservation" class="btn-primary"><span>Reserve a Table</span></a>
-      <a href="#menu" class="btn-outline">Explore Menu</a>
+      <a href="menu.html" class="btn-outline">Explore Menu</a>
     </div>
   </div>
   <div class="hero-scroll">
@@ -778,7 +810,7 @@
   <div class="about-inner">
     <div class="about-visual reveal">
       <video class="about-img-main" autoplay muted loop playsinline preload="metadata" aria-label="Chef Mazen in action">
-        <source src="video/vd.webm" type="video/webm">
+        <source src="video/Vd.mp4" type="video/mp4">
       </video>
       <div class="about-badge"><strong>20+</strong><span>Years</span></div>
     </div>
@@ -852,8 +884,12 @@
     </div>
 
     <div class="menu-downloads reveal">
+      <a href="menu.html" class="download-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        View Full Digital Menu
+      </a>
       <a href="#" class="download-btn" onclick="event.preventDefault(); alert('Mazen menu PDF will be available soon!')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2.18 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download Mazen Menu (PDF)
       </a>
     </div>
@@ -923,7 +959,7 @@
         autoplay muted loop playsinline
         title="Chef Mazen Live Cooking Show"
         style="width:100%;height:100%;object-fit:cover;display:block;">
-        <source src="video/v2.webm" type="video/webm">
+        <source src="video/v2.mp4" type="video/mp4">
       </video>
 
       <!-- Dark gradient overlay bottom -->
@@ -1026,16 +1062,13 @@
             <span class="location-city">Flagship Location</span>
             <div class="location-detail">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Q6F8+XQ Tanger
+              Tangier
             </div>
             <div class="location-detail">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l1.27-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               05 39 40 04 66
             </div>
-            <div class="location-detail">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              tangier@mazenchef.ma
-            </div>
+
             <div class="location-hours-badge"><div class="hours-dot"></div>Open Daily: 12:00 PM – 03:00 AM</div>
           </div>
         </div>
@@ -1054,16 +1087,13 @@
             <span class="location-city">Capital Branch</span>
             <div class="location-detail">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              2523+H6 Rabat
+              Rabat
             </div>
             <div class="location-detail">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l1.27-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               05 37 67 20 02
             </div>
-            <div class="location-detail">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              rabat@mazenchef.ma
-            </div>
+
             <div class="location-hours-badge"><div class="hours-dot"></div>Open Daily: 12:00 PM – 03:00 AM</div>
           </div>
         </div>
@@ -1175,15 +1205,11 @@
           <a href="#" class="social-link" aria-label="Instagram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
-          <a href="#" class="social-link" aria-label="Facebook">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </a>
+
           <a href="#" class="social-link" aria-label="TikTok">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
           </a>
-          <a href="#" class="social-link" aria-label="WhatsApp">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          </a>
+
         </div>
       </div>
       <div>
@@ -1213,12 +1239,13 @@
         <div class="footer-col-title">Contact</div>
         <div class="footer-contact-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l1.27-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          +212 5 39 XX XX XX
+          Tangier: 05 39 40 04 66
         </div>
         <div class="footer-contact-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          info@mazenchef.ma
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l1.27-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Rabat: 05 37 67 20 02
         </div>
+
         <div style="margin-top:1.5rem">
           <a href="#reservation" class="btn-primary" style="font-size:0.72rem;padding:0.8rem 1.6rem;display:inline-block"><span>Book a Table</span></a>
         </div>
@@ -1226,58 +1253,8 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-copy">© 2025 Mazen Chef. All rights reserved. Crafted with passion in Morocco.</div>
-      <div class="footer-payment">
-        <!-- Visa -->
-        <svg class="pay-logo" viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg" aria-label="Visa">
-          <rect width="780" height="500" rx="40" fill="#1a1f71"/>
-          <path d="M290 350L330 150h60L350 350z" fill="#fff"/>
-          <path d="M530 155c-12-4-30-9-53-9-58 0-99 29-99 71 0 31 29 48 51 58s30 17 30 26c0 14-18 20-35 20-23 0-36-3-55-11l-8-4-8 49c14 6 39 11 65 11 61 0 101-29 101-73 0-24-16-43-51-58-21-10-34-16-34-26 0-9 11-18 35-18 20 0 34 4 45 8l5 3 8-47z" fill="#fff"/>
-          <path d="M610 150h-45c-14 0-24 4-30 18l-85 182h60s10-26 12-32h74c2 7 7 32 7 32h53L610 150zm-71 124c5-12 23-59 23-59s5-12 8-20l4 18s10 49 12 61h-47z" fill="#fff"/>
-          <path d="M235 150l-57 136-6-30c-11-35-44-72-81-91l53 185h61l91-200h-61z" fill="#fff"/>
-          <path d="M125 150H30l-1 5c74 18 123 61 143 113l-21-101c-3-13-13-17-26-17z" fill="#f9a533"/>
-        </svg>
-        <!-- Mastercard -->
-        <svg class="pay-logo" viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
-          <rect width="780" height="500" rx="40" fill="#252525"/>
-          <circle cx="300" cy="250" r="150" fill="#eb001b"/>
-          <circle cx="480" cy="250" r="150" fill="#f79e1b"/>
-          <path d="M390 150a150 150 0 0 1 0 200 150 150 0 0 1 0-200z" fill="#ff5f00"/>
-        </svg>
-        <!-- Amex -->
-        <svg class="pay-logo" viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg" aria-label="American Express">
-          <rect width="780" height="500" rx="40" fill="#2557d6"/>
-          <path d="M155 195h50l12 28 12-28h220v21l9-21h54l9 21v-21h240v110h-243l-12-28-12 28H344v-25h-28v25H155V195z" fill="#fff"/>
-          <path d="M175 215l-30 70h20l5-13h33l5 13h21l-30-70h-24zm12 18l10 24h-20l10-24z" fill="#2557d6"/>
-          <path d="M260 215v70h19v-44l18 44h16l18-44v44h19v-70h-27l-18 43-17-43h-28z" fill="#2557d6"/>
-          <path d="M700 285v-70h-19v70h19z" fill="#fff"/>
-          <path d="M620 215v70h75v-16h-56v-13h55v-15h-55v-11h56v-15h-75z" fill="#2557d6"/>
-          <path d="M455 215l-30 70h20l6-13h32l5 13h21l-30-70h-24zm12 18l10 24h-20l10-24z" fill="#2557d6"/>
-          <path d="M540 215v70h19v-26h8l22 26h24l-24-27c12-2 20-10 20-22 0-14-10-21-27-21h-42zm19 15h20c6 0 10 3 10 8s-4 8-10 8h-20v-16z" fill="#2557d6"/>
-        </svg>
-        <!-- Cash -->
-        <svg class="pay-logo" viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg" aria-label="Cash">
-          <rect width="780" height="500" rx="40" fill="#1a2e1a"/>
-          <rect x="60" y="160" width="660" height="180" rx="12" fill="none" stroke="#4ade80" stroke-width="12"/>
-          <circle cx="390" cy="250" r="65" fill="none" stroke="#4ade80" stroke-width="12"/>
-          <circle cx="390" cy="250" r="35" fill="none" stroke="#4ade80" stroke-width="8"/>
-          <circle cx="145" cy="250" r="28" fill="none" stroke="#4ade80" stroke-width="8"/>
-          <circle cx="635" cy="250" r="28" fill="none" stroke="#4ade80" stroke-width="8"/>
-          <text x="390" y="340" text-anchor="middle" font-family="Arial" font-size="48" font-weight="bold" fill="#4ade80">CASH</text>
-        </svg>
-        <!-- CMI / Carte bancaire Maroc -->
-        <svg class="pay-logo" viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg" aria-label="CMI">
-          <rect width="780" height="500" rx="40" fill="#fff"/>
-          <rect x="60" y="120" width="660" height="260" rx="20" fill="#e8f0fe"/>
-          <rect x="60" y="200" width="660" height="60" fill="#c9a96e" opacity=".7"/>
-          <rect x="80" y="290" width="120" height="70" rx="8" fill="#c9a96e"/>
-          <text x="390" y="175" text-anchor="middle" font-family="Arial" font-size="52" font-weight="bold" fill="#1a1f71">CMI</text>
-          <text x="390" y="400" text-anchor="middle" font-family="Arial" font-size="32" fill="#555">Carte bancaire</text>
-        </svg>
-      </div>
-      <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-      </div>
+
+
     </div>
   </div>
 </footer>
