@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mazen-chef-cache-v5';
+const CACHE_NAME = 'mazen-chef-cache-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -13,8 +13,22 @@ const ASSETS = [
   './assets/css/menu.css?v=4',
   './assets/js/app.js?v=3',
   './assets/js/menu.js?v=2',
+  './assets/js/pwa-register.js',
+  './assets/js/utils.js',
+  './assets/js/config/app-config.js',
+  './assets/js/components/pwa.js',
+  './assets/js/components/loader.js',
+  './assets/js/components/navigation.js',
+  './assets/js/components/reveal.js',
+  './assets/js/components/lightbox.js',
+  './assets/js/components/video-reviews.js',
+  './assets/js/components/reservation.js',
+  './assets/js/components/datepicker.js',
+  './assets/js/components/menu-preview.js',
   './assets/images/logo.png',
-  './assets/images/pwa.jpeg'
+  './assets/images/pwa.jpeg',
+  './assets/images/icons/pwa-192.png',
+  './assets/images/icons/pwa-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -35,5 +49,27 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(caches.match(event.request).then((response) => response || fetch(event.request)));
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) return cachedResponse;
+
+      return fetch(event.request)
+        .then((networkResponse) => {
+          const requestUrl = new URL(event.request.url);
+          if (requestUrl.origin === self.location.origin && networkResponse.ok) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+          return Response.error();
+        });
+    })
+  );
 });

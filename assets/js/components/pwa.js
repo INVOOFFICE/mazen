@@ -1,14 +1,11 @@
 import { APP_CONFIG } from '../config/app-config.js';
 import { $ } from '../utils.js';
+import { registerServiceWorker } from '../pwa-register.js';
 
 let deferredPrompt;
 
 export function initPwa() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register(APP_CONFIG.serviceWorkerPath).catch((err) => console.log('SW failed: ', err));
-    });
-  }
+  registerServiceWorker(APP_CONFIG.serviceWorkerPath);
 
   const banner = $('#pwa-banner');
   const installBtn = $('#pwa-install-btn');
