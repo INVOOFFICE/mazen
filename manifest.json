@@ -9,7 +9,7 @@
   "theme_color": "#0f0f0f",
   "icons": [
     {
-      "src": "pwa.jpeg",
+      "src": "assets/images/pwa.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"

@@ -1,0 +1,59 @@
+import { APP_CONFIG } from '../config/app-config.js';
+import { $, formatDisplayDate } from '../utils.js';
+
+export function initReservationForm() {
+  const form = $('#reservationForm');
+  if (!form) return;
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = form.querySelector('input[type=text]').value.trim();
+    const phone = form.querySelector('input[type=tel]').value.trim();
+    const email = form.querySelector('input[type=email]').value.trim();
+    const selects = form.querySelectorAll('select');
+    const branch = selects[0].value;
+    const time = selects[1].value;
+    const guests = selects[2].value;
+    const date = $('#reservationDateValue')?.value;
+    const special = form.querySelector('input[placeholder*="Allergies"]')?.value.trim() || '';
+
+    let dateDisplay = date;
+    if (date) dateDisplay = formatDisplayDate(new Date(date + 'T00:00:00'));
+
+    const message = `🍽️ *New Table Reservation - Mazen Chef*
+
+👤 *Name:* ${name}
+📞 *Phone:* ${phone}
+📧 *Email:* ${email}
+🏠 *Branch:* ${branch}
+📅 *Date:* ${dateDisplay}
+🕐 *Time:* ${time}
+👥 *Guests:* ${guests}${special ? '\n📝 *Special Requests:* ' + special : ''}
+
+_Sent via mazenchef.ma_`;
+
+    const buttonLabel = form.querySelector('button[type=submit] span');
+    const submitButton = buttonLabel?.parentElement;
+    if (buttonLabel && submitButton) {
+      buttonLabel.textContent = 'Redirecting to WhatsApp ✓';
+      submitButton.style.background = '#25d366';
+      submitButton.style.color = '#fff';
+    }
+
+    setTimeout(() => {
+      window.open(`https://wa.me/${APP_CONFIG.whatsappPhone}?text=${encodeURIComponent(message)}`, '_blank');
+      if (buttonLabel && submitButton) {
+        buttonLabel.textContent = 'Confirm Reservation';
+        submitButton.style.background = '';
+        submitButton.style.color = '';
+      }
+      form.reset();
+      const displayText = $('#dpDisplayText');
+      if (displayText) {
+        displayText.textContent = 'Select a date';
+        displayText.className = 'dp-placeholder';
+      }
+      if ($('#reservationDateValue')) $('#reservationDateValue').value = '';
+    }, 800);
+  });
+}
