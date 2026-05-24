@@ -81,6 +81,7 @@ body {
   color: var(--gold);
   letter-spacing: 0.05em;
   line-height: 1;
+  margin: 0;
 }
 .brand-name em { font-style: italic; color: var(--gold2); font-weight: 700; }
 .brand-sub {
