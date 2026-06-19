@@ -217,6 +217,8 @@
   .location-info {
     padding: 1.25rem;
   }
+  .menu-card-img { margin: -1.25rem -1.25rem 1rem -1.25rem; }
+  .menu-card-img img { height: 150px; }
 
   .gallery-grid {
     gap: 0.85rem;

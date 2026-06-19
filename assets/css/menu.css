@@ -32,9 +32,10 @@ body {
   min-height: 100vh;
 }
 
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--black); }
-::-webkit-scrollbar-thumb { background: var(--gold3); border-radius: 10px; }
+  * { scrollbar-width: thin; scrollbar-color: var(--gold3) var(--black); }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold3); border-radius: 10px; }
 
 /* ── LAYOUT ──────────────────────────────────────── */
 .layout {
@@ -57,6 +58,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+.sidebar { scrollbar-width: thin; scrollbar-color: var(--gold3) transparent; }
 .sidebar::-webkit-scrollbar { width: 2px; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--gold3); }
 
@@ -227,6 +229,8 @@ body {
   overflow: hidden;
 }
 .item-card:hover { background: var(--black3); }
+.item-card-img { margin: -2rem -2.2rem 1.5rem -2.2rem; overflow: hidden; }
+.item-card-img img { width: 100%; height: 180px; object-fit: cover; display: block; }
 .item-number { font-family: var(--serif); font-size: 0.65rem; color: var(--gold3); letter-spacing: 0.15em; font-style: italic; margin-bottom: 1rem; }
 .item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
 .item-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; color: var(--white); line-height: 1.2; flex: 1; }
@@ -244,6 +248,8 @@ body {
   border-bottom: 0.5px solid rgba(200,169,106,0.08);
   gap: 2rem;
 }
+.list-img { flex-shrink: 0; width: 60px; height: 60px; border-radius: 50%; overflow: hidden; align-self: center; }
+.list-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .list-info { flex: 1; }
 .list-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: var(--white); }
 .list-desc { display: block; font-size: 0.68rem; font-weight: 300; color: var(--gray2); margin-top: 0.3rem; letter-spacing: 0.03em; }
@@ -302,6 +308,8 @@ body {
   .section-title { font-size: 2rem; }
   .menu-grid { grid-template-columns: 1fr; border-left: none; }
   .item-card { border-left: none; border-right: none; padding: 1.6rem 0; }
+  .item-card-img { margin: -1.6rem 0 1rem 0; }
+  .item-card-img img { height: 140px; }
   /* Fix list items on small screens */
   .list-item { gap: 0.8rem; padding: 1.2rem 0; }
   .list-dots { min-width: 20px; }

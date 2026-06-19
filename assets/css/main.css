@@ -24,8 +24,12 @@
   }
   img { max-width: 100%; display: block; }
   a { text-decoration: none; color: inherit; }
+  button { border: none; background: none; cursor: pointer; font: inherit; color: inherit; }
+  input, select, textarea { font: inherit; color: inherit; }
+  select { appearance: none; -webkit-appearance: none; -moz-appearance: none; }
 
   /* ===== SCROLLBAR ===== */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold) var(--black); }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--black); }
   ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }

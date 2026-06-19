@@ -53,7 +53,7 @@
       "priceRange": "$$",
       "currenciesAccepted": "MAD",
       "paymentAccepted": "Cash, Credit Card",
-      "hasMenu": "https://www.mazenchef.com/menu.html",
+      "hasMenu": "https://www.mazenchef.com/menu",
       "acceptsReservations": true,
       "openingHoursSpecification": [
         {
@@ -133,7 +133,7 @@
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about">About</a>
-  <a href="menu.html">Menu</a>
+  <a href="menu">Menu</a>
   <a href="#gallery">Gallery</a>
   <a href="#video">Show</a>
   <a href="#locations">Locations</a>
@@ -145,7 +145,7 @@
   <a href="#hero" class="nav-logo">Mazen Chef<span>Syrian &amp; International</span></a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="menu.html">Menu</a></li>
+    <li><a href="menu">Menu</a></li>
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#video">Live Show</a></li>
     <li><a href="#locations">Locations</a></li>
@@ -170,7 +170,7 @@
     <p class="hero-sub">Where Syrian tradition meets international innovation. Led by the acclaimed Chef Mazen, every dish is a journey — prepared live before your eyes.</p>
     <div class="hero-actions">
       <a href="#reservation" class="btn-primary"><span>Reserve a Table</span></a>
-      <a href="menu.html" class="btn-outline">Explore Menu</a>
+      <a href="menu" class="btn-outline">Explore Menu</a>
     </div>
   </div>
   <div class="hero-scroll">
@@ -217,58 +217,8 @@
       <p class="section-copy">A curated selection of authentic grills and Syrian classics, each dish crafted with the finest ingredients and prepared with passion.</p>
     </div>
 
-    <!-- Mazen Cuisine Menu -->
-    <div class="menu-panel active" id="panel-syrian">
-      <div class="menu-grid">
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills</div>
-          <div class="menu-card-name">Chicken Skewers Dish</div>
-          <div class="menu-card-desc">3 skewers served with mindi rice. Tender chicken marinated in house spices, grilled to perfection.</div>
-          <div class="menu-card-footer"><span class="menu-price">110 MAD</span><span class="menu-tag">Signature</span></div>
-        </div>
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills</div>
-          <div class="menu-card-name">Chiche Taouk Dish</div>
-          <div class="menu-card-desc">3 skewers served with mindi rice. Juicy marinated chicken taouk with a blend of aromatic spices.</div>
-          <div class="menu-card-footer"><span class="menu-price">120 MAD</span><span class="menu-tag">Popular</span></div>
-        </div>
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills</div>
-          <div class="menu-card-name">Chicken Wings Dish</div>
-          <div class="menu-card-desc">3 skewers served with mindi rice. Crispy golden wings with Chef Mazen's secret spice blend.</div>
-          <div class="menu-card-footer"><span class="menu-price">95 MAD</span><span class="menu-tag">Crispy</span></div>
-        </div>
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills</div>
-          <div class="menu-card-name">Minced Meat Dish</div>
-          <div class="menu-card-desc">3 skewers served with mindi rice and fresh salads. Seasoned minced meat grilled over charcoal.</div>
-          <div class="menu-card-footer"><span class="menu-price">130 MAD</span><span class="menu-tag">Charcoal</span></div>
-        </div>
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills</div>
-          <div class="menu-card-name">Meat Skewers Dish</div>
-          <div class="menu-card-desc">3 skewers served with mindi rice and fresh salads. Premium cuts of meat grilled to smoky perfection.</div>
-          <div class="menu-card-footer"><span class="menu-price">145 MAD</span><span class="menu-tag">Premium</span></div>
-        </div>
-        <div class="menu-card reveal">
-          <div class="menu-card-cat">Grills — Sharing</div>
-          <div class="menu-card-name">Medium Mixed Dish</div>
-          <div class="menu-card-desc">10 skewers served with mindi rice and fresh salads. The ultimate sharing platter for the whole table.</div>
-          <div class="menu-card-footer"><span class="menu-price">350 MAD</span><span class="menu-tag">For the Table</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="menu-downloads reveal">
-      <a href="menu.html" class="download-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        View Full Digital Menu
-      </a>
-      <a href="#" class="download-btn" data-pdf-placeholder>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2.18 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Mazen Menu (PDF)
-      </a>
-    </div>
+    <div class="menu-category-nav" id="menuCategoryNav"></div>
+    <div class="menu-sections-container" id="menuSectionsContainer"></div>
   </div>
 </section>
 
@@ -429,7 +379,7 @@
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3237.0187241872304!2d-5.783063499999999!3d35.774916399999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0b8161d6825ed1%3A0x4a4e46d408db5f3d!2zTWF6ZW4gQ2hlZiBSZXN0YXVyYW50IHwg2YXYt9i52YUg2YXYp9iy2YYg2LTZitmB!5e0!3m2!1sfr!2sma!4v1777148627717!5m2!1sfr!2sma"
               allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-              title="Mazen Chef Tangier location">
+              aria-label="Mazen Chef Tangier location">
             </iframe>
           </div>
           <div class="location-info">
@@ -454,7 +404,7 @@
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3307.654961746527!2d-6.8469953!3d34.00139529999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76d4a5cb670a7%3A0xb9684b40c64b2a88!2zU2hhd2FybWEgTWF6ZW4gQ2hlZiB8INi02KfZiNix2YXYpyDZhdin2LLZhiDYtNmK2YE!5e0!3m2!1sfr!2sma!4v1777148558328!5m2!1sfr!2sma"
               allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-              title="Mazen Chef Rabat location">
+              aria-label="Mazen Chef Rabat location">
             </iframe>
           </div>
           <div class="location-info">
@@ -595,6 +545,7 @@
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#video">Live Show</a></li>
           <li><a href="#reservation">Reservations</a></li>
+          <li><a href="admin-login.html">Connexion</a></li>
         </ul>
       </div>
       <div>

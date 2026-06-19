@@ -1,11 +1,12 @@
 import { APP_CONFIG } from '../config/app-config.js';
 import { $, formatDisplayDate } from '../utils.js';
+import { supabase } from '../supabase-client.js';
 
 export function initReservationForm() {
   const form = $('#reservationForm');
   if (!form) return;
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = form.querySelector('input[type=text]').value.trim();
     const phone = form.querySelector('input[type=tel]').value.trim();
@@ -35,9 +36,25 @@ _Sent via mazenchef.ma_`;
     const buttonLabel = form.querySelector('button[type=submit] span');
     const submitButton = buttonLabel?.parentElement;
     if (buttonLabel && submitButton) {
-      buttonLabel.textContent = 'Redirecting to WhatsApp ✓';
-      submitButton.style.background = '#25d366';
-      submitButton.style.color = '#fff';
+      buttonLabel.textContent = 'Envoi en cours...';
+      submitButton.style.background = '#d8b66f';
+      submitButton.style.color = '#15100a';
+    }
+
+    try {
+      await supabase.from('reservations').insert({
+        name,
+        phone,
+        email,
+        branch,
+        date,
+        time,
+        guests,
+        special_requests: special,
+        status: 'pending',
+      });
+    } catch (err) {
+      console.warn('Réservation non sauvegardée dans Supabase:', err.message);
     }
 
     setTimeout(() => {

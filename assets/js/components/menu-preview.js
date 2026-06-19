@@ -9,7 +9,7 @@ export function initMenuPreview() {
   $$('[data-pdf-placeholder]').forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      alert('Mazen menu PDF will be available soon!');
+      console.log('Mazen menu PDF will be available soon!');
     });
   });
 

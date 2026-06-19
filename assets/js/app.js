@@ -6,7 +6,7 @@ import { initLightbox } from './components/lightbox.js';
 import { initVideoReviews } from './components/video-reviews.js';
 import { initReservationForm } from './components/reservation.js';
 import { initDatepicker } from './components/datepicker.js';
-import { initMenuPreview } from './components/menu-preview.js';
+import { initMenuFullEmbed } from './components/menu-full-embed.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   initPwa();
@@ -17,5 +17,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideoReviews();
   initReservationForm();
   initDatepicker();
-  initMenuPreview();
+  initMenuFullEmbed();
 });
