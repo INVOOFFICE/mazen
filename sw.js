@@ -24,7 +24,6 @@ const ASSETS = [
   './assets/js/components/video-reviews.js',
   './assets/js/components/reservation.js',
   './assets/js/components/datepicker.js',
-  './assets/js/components/menu-preview.js',
   './assets/images/logo.png',
   './assets/images/pwa.jpeg',
   './assets/images/icons/pwa-192.png',

@@ -1,4 +1,5 @@
 import { supabase } from '../supabase-client.js'
+import { escapeHtml } from '../utils.js'
 
 const SVG_MAP = {
   'Cold Starters': '<circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/>',
@@ -149,9 +150,4 @@ export async function initMenuFull() {
   }
 }
 
-function escapeHtml(text) {
-  if (!text) return ''
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
+

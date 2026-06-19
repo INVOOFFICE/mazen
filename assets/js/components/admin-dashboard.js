@@ -1,5 +1,6 @@
 import { supabase } from '../supabase-client.js'
 import { APP_CONFIG } from '../config/app-config.js'
+import { escapeHtml } from '../utils.js'
 const SUPABASE_URL = APP_CONFIG.supabase.url
 
 let editingId = null
@@ -118,21 +119,15 @@ async function loadMenuItems(section) {
   const isAll = section === 'all'
   try {
     let query = supabase.from('menu_items').select('*')
-    if (!isAll) {
-      if (section === 'home') {
-        query = supabase.from('menu_items').select('*')
-      }
+    if (!isAll && section !== 'home') {
+      query = query.eq('section', section)
     }
     const { data, error } = await query.order('created_at', { ascending: false })
     if (error) throw error
 
     let items = data || []
-    if (!isAll) {
-      if (section === 'home') {
-        items = items.filter(item => !item.section || item.section === 'home')
-      } else {
-        items = items.filter(item => item.section === section)
-      }
+    if (!isAll && section === 'home') {
+      items = items.filter(item => !item.section || item.section === 'home')
     }
 
     if (!items || items.length === 0) {
@@ -325,14 +320,13 @@ async function deleteMenuItem(id) {
 
     if (item && item.image_url) {
       const key = item.image_url.split('/').pop()
-      const token = localStorage.getItem('mazen_supabase_session')
       const { data: { session } } = await supabase.auth.getSession()
       await fetch(`${SUPABASE_URL}/storage/v1/object/menu-images/${key}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${session?.access_token || ''}`,
-          'apikey': session?.access_token || '',
-        }
+    headers: {
+      'Authorization': `Bearer ${session?.access_token || ''}`,
+      'apikey': APP_CONFIG.supabase.anonKey,
+    }
       }).catch(() => {})
     }
 
@@ -388,7 +382,7 @@ async function loadReservations() {
                 ${r.special_requests ? `<span class="td-muted">📝 ${escapeHtml(r.special_requests)}</span>` : ''}
               </td>
               <td>
-                <span class="status-badge ${r.status || 'pending'}">${r.status || 'pending'}</span>
+                <span class="status-badge ${r.status || 'pending'}">${escapeHtml(r.status || 'pending')}</span>
               </td>
               <td>
                 <select class="status-select" data-id="${r.id}" data-current="${r.status || 'pending'}">
@@ -454,9 +448,4 @@ function showToast(message, type) {
   setTimeout(() => toast.classList.remove('show'), 3000)
 }
 
-function escapeHtml(text) {
-  if (!text) return ''
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
+

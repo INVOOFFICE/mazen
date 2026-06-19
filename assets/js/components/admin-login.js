@@ -16,7 +16,7 @@ form.addEventListener('submit', async (e) => {
   const password = passwordInput.value
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       const msg = parseError(error.message)

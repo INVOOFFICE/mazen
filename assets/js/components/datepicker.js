@@ -113,3 +113,18 @@ export function initDatepicker() {
 
   renderCalendar();
 }
+
+export function getSelectedDate() {
+  const input = document.getElementById('reservationDateValue');
+  return input ? input.value : '';
+}
+
+export function resetDatepicker() {
+  const displayText = document.getElementById('dpDisplayText');
+  const hiddenInput = document.getElementById('reservationDateValue');
+  if (displayText) {
+    displayText.textContent = 'Select a date';
+    displayText.className = 'dp-placeholder';
+  }
+  if (hiddenInput) hiddenInput.value = '';
+}

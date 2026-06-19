@@ -174,7 +174,6 @@ export const supabase = {
       },
 
       update(payload) {
-        const parent = this
         const qs = qsFromParams(this._params)
         return {
           eq(column, value) {

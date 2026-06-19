@@ -1,5 +1,6 @@
 import { APP_CONFIG } from '../config/app-config.js';
 import { $, formatDisplayDate } from '../utils.js';
+import { getSelectedDate, resetDatepicker } from './datepicker.js';
 import { supabase } from '../supabase-client.js';
 
 export function initReservationForm() {
@@ -15,7 +16,7 @@ export function initReservationForm() {
     const branch = selects[0].value;
     const time = selects[1].value;
     const guests = selects[2].value;
-    const date = $('#reservationDateValue')?.value;
+    const date = getSelectedDate();
     const special = form.querySelector('input[placeholder*="Allergies"]')?.value.trim() || '';
 
     let dateDisplay = date;
@@ -65,12 +66,7 @@ _Sent via mazenchef.ma_`;
         submitButton.style.color = '';
       }
       form.reset();
-      const displayText = $('#dpDisplayText');
-      if (displayText) {
-        displayText.textContent = 'Select a date';
-        displayText.className = 'dp-placeholder';
-      }
-      if ($('#reservationDateValue')) $('#reservationDateValue').value = '';
+      resetDatepicker();
     }, 800);
   });
 }
