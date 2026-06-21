@@ -1,5 +1,5 @@
 export const APP_CONFIG = {
-  whatsappPhone: '212607706483',
+  whatsappPhone: '212613181823',
   serviceWorkerPath: 'sw.js',
   hero: {
     images: [

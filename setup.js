@@ -57,7 +57,7 @@ console.log('✅ Configuration chargée depuis .env');
 // ── Génère app-config.js ────────────────────────────
 const appConfigPath = path.join(__dirname, 'assets', 'js', 'config', 'app-config.js');
 const appConfigContent = `export const APP_CONFIG = {
-  whatsappPhone: '${env.WHATSAPP_PHONE || '212607706483'}',
+  whatsappPhone: '${env.WHATSAPP_PHONE || '212613181823'}',
   serviceWorkerPath: 'sw.js',
   hero: {
     images: [
